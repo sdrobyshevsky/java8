@@ -50,7 +50,10 @@ public class PhoneBook {
         System.out.print("Enter contact phone number: ");
         String phoneNumber = scanner.nextLine();
 
-        Contact contact = new Contact(name, phoneNumber);
+        System.out.print("Enter contact adress: ");
+        String adress = scanner.nextLine();
+
+        Contact contact = new Contact(name, phoneNumber, adress);
         contacts.add(contact);
 
         System.out.println("Contact added successfully!");
@@ -70,7 +73,7 @@ public class PhoneBook {
                 String phoneNumber = scanner.nextLine();
                 scanner.nextLine(); // Skip the separator
 
-                Contact contact = new Contact(name, phoneNumber);
+                Contact contact = new Contact(name, phoneNumber, adress);
                 contacts.add(contact);
             }
 
@@ -85,8 +88,12 @@ public class PhoneBook {
             FileWriter fileWriter = new FileWriter(FILE_NAME);
             for (Contact contact : contacts) {
                 fileWriter.write(contact.getName() + "\n");
+                fileWriter.write("\n");
                 fileWriter.write(contact.getPhoneNumber() + "\n");
                 fileWriter.write("\n");
+                fileWriter.write(contact.getAdress() + "\n");
+                fileWriter.write("\n"); 
+
             }
             fileWriter.close();
 
@@ -101,17 +108,27 @@ public class PhoneBook {
 class Contact {
     private String name;
     private String phoneNumber;
+    private String adress;
 
-    public Contact(String name, String phoneNumber) {
+    public Contact(String name, String phoneNumber, String adress) 
+    {
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.adress = adress;
     }
 
-    public String getName() {
+    public String getName() 
+    {
         return name;
     }
 
-    public String getPhoneNumber() {
+    public String getPhoneNumber() 
+    {
         return phoneNumber;
+    }
+
+    public String getAdress() 
+    {
+        return adress;
     }
 }
