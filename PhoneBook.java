@@ -2,12 +2,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class PhoneBook {
+public class PhoneBook 
+{
 
     private static final String FILE_NAME = "phonebook.txt";
     private static String adress;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         ArrayList<Contact> contacts = new ArrayList<>();
 
         String choice;
@@ -20,7 +22,8 @@ public class PhoneBook {
             Scanner scanner = new Scanner(System.in);
             choice = scanner.nextLine();
 
-            switch (choice) {
+            switch (choice) 
+            {
                 case "1":
                     addContact(contacts);
                     break;
@@ -42,7 +45,8 @@ public class PhoneBook {
         } while (!choice.equals("4"));
     }
 
-    private static void addContact(ArrayList<Contact> contacts) {
+    private static void addContact(ArrayList<Contact> contacts) 
+    {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter contact name: ");
@@ -60,16 +64,20 @@ public class PhoneBook {
         System.out.println("Contact added successfully!");
     }
 
-    private static void importContacts(ArrayList<Contact> contacts) {
-        try {
+    private static void importContacts(ArrayList<Contact> contacts) 
+    {
+        try 
+        {
             File file = new File(FILE_NAME);
-            if (!file.exists()) {
+            if (!file.exists()) 
+            {
                 System.out.println("File does not exist!");
                 return;
             }
 
             Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
+            while (scanner.hasNextLine()) 
+            {
                 String name = scanner.nextLine();
                 String phoneNumber = scanner.nextLine();
                 scanner.nextLine(); // Skip the separator
@@ -79,16 +87,19 @@ public class PhoneBook {
             }
 
             System.out.println("Contacts imported successfully!");
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) 
+        {
             System.out.println("An error occurred during file import!");
         }
     }
 
     private static void exportContacts(ArrayList<Contact> contacts) 
     {
-        try {
+        try 
+        {
             FileWriter fileWriter = new FileWriter(FILE_NAME);
-            for (Contact contact : contacts) {
+            for (Contact contact : contacts) 
+            {
                 fileWriter.write(contact.getName() + "\n");
                 fileWriter.write("\n");
                 fileWriter.write(contact.getPhoneNumber() + "\n");
@@ -99,8 +110,9 @@ public class PhoneBook {
             }
             fileWriter.close();
 
-            System.out.println("Contacts exported successfully!");
-        } catch (IOException e) {
+            System.out.println("Contacts exported successfully!");            
+        } catch (IOException e)
+        {
             System.out.println("An error occurred during file export!");
         }
     }
