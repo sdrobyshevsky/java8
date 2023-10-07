@@ -1,46 +1,117 @@
-import org.w3c.dom.ranges.RangeException;
-import java.util.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-class PhoneBook {
-    
-    private Map<Long, Save> saves = new HashMap<Long, Save>();
-    private long nextId;
-    private long getNextId() {
-        if (nextId < Long.MAX_VALUE && !saves.containsKey(nextId))
-            return nextId++;
-        nextId = 0;
-        while (nextId < Long.MAX_VALUE) { 
-            if (!saves.containsKey(nextId))
-                return nextId;
-            ++nextId;
+public class PhoneBook {
+
+    private static final String FILE_NAME = "phonebook.txt";
+
+    public static void main(String[] args) {
+        ArrayList<Contact> contacts = new ArrayList<>();
+
+        String choice;
+        do {
+            System.out.println("1. Add contact");
+            System.out.println("2. Import contacts");
+            System.out.println("3. Export contacts");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            Scanner scanner = new Scanner(System.in);
+            choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    addContact(contacts);
+                    break;
+                case "2":
+                    importContacts(contacts);
+                    break;
+                case "3":
+                    exportContacts(contacts);
+                    break;
+                case "4":
+                    System.out.println("Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+
+            System.out.println();
+        } while (!choice.equals("4"));
+    }
+
+    private static void addContact(ArrayList<Contact> contacts) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter contact name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter contact phone number: ");
+        String phoneNumber = scanner.nextLine();
+
+        Contact contact = new Contact(name, phoneNumber);
+        contacts.add(contact);
+
+        System.out.println("Contact added successfully!");
+    }
+
+    private static void importContacts(ArrayList<Contact> contacts) {
+        try {
+            File file = new File(FILE_NAME);
+            if (!file.exists()) {
+                System.out.println("File does not exist!");
+                return;
+            }
+
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String name = scanner.nextLine();
+                String phoneNumber = scanner.nextLine();
+                scanner.nextLine(); // Skip the separator
+
+                Contact contact = new Contact(name, phoneNumber);
+                contacts.add(contact);
+            }
+
+            System.out.println("Contacts imported successfully!");
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred during file import!");
         }
-        throw new RangeException((short)111, "No more IDs availiable");
     }
-    public Save addSave(String phone, String name, String address)
-            throws CloneNotSupportedException {
-        long saveId = getNextId();
-        Save save = new Save(saveId, phone, name, address);
-        saves.put(saveId, save);
-        return (Save)save.clone();
+
+    private static void exportContacts(ArrayList<Contact> contacts) {
+        try {
+            FileWriter fileWriter = new FileWriter(FILE_NAME);
+            for (Contact contact : contacts) {
+                fileWriter.write(contact.getName() + "\n");
+                fileWriter.write(contact.getPhoneNumber() + "\n");
+                fileWriter.write("\n");
+            }
+            fileWriter.close();
+
+            System.out.println("Contacts exported successfully!");
+        } catch (IOException e) {
+            System.out.println("An error occurred during file export!");
+        }
     }
-    public Save getSave(long id) throws CloneNotSupportedException {
-        if (saves.containsKey(id))
-            return (Save)saves.get(id).clone();
-        return null;
+
+}
+
+class Contact {
+    private String name;
+    private String phoneNumber;
+
+    public Contact(String name, String phoneNumber) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
     }
-    public Save updateSave(long id, String phone, String name, String address)
-            throws CloneNotSupportedException {
-        Save save = new Save(id, phone, name, address);
-        saves.put(id, save);
-        return getSave(id);
+
+    public String getName() {
+        return name;
     }
-    public void removeSave(long id) {
-        saves.remove(id);
-    }
-    public List<Save> allSaves() {
-        List<Save> result = new ArrayList<Save>();
-        for (Save save : this.saves.values())
-            result.add((Save) save);
-        return result;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 }
