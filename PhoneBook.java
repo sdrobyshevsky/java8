@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class PhoneBook {
 
     private static final String FILE_NAME = "phonebook.txt";
+    private static String adress;
 
     public static void main(String[] args) {
         ArrayList<Contact> contacts = new ArrayList<>();
@@ -83,7 +84,8 @@ public class PhoneBook {
         }
     }
 
-    private static void exportContacts(ArrayList<Contact> contacts) {
+    private static void exportContacts(ArrayList<Contact> contacts) 
+    {
         try {
             FileWriter fileWriter = new FileWriter(FILE_NAME);
             for (Contact contact : contacts) {
@@ -105,7 +107,8 @@ public class PhoneBook {
 
 }
 
-class Contact {
+class Contact 
+{
     private String name;
     private String phoneNumber;
     private String adress;
